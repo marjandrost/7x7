@@ -9,7 +9,7 @@
 import UIKit
 
 class Game: NSObject {
-    var wedstrijdDatum: NSDate?
+    var wedstrijdDatum: Date?
     var wedstrijdTijd: String?
     var thuisTeam: Team?
     var uitTeam: Team?

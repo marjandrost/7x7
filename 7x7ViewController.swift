@@ -15,9 +15,9 @@ class _x7ViewController: UIViewController {
     @IBOutlet weak var lblDagenTekst: UILabel!
 
     let datumPickerData = DatumPickerData()
-    let userCalendar = NSCalendar.currentCalendar()
-    let days:NSCalendarUnit = .Day
-    let today = NSDate()
+    let userCalendar = Calendar.current
+    let days:NSCalendar.Unit = .day
+    let today = Date()
     var dagenText:String = ""
     
     override func viewDidLoad() {
@@ -40,13 +40,13 @@ class _x7ViewController: UIViewController {
         if Reachability.isConnectedToNetwork() == true {
         // get future gamedates, to calculate numberofdays before next game
         datumPickerData.fetchDatums {
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
                 if let nextGame = self.datumPickerData.speelData[0].speelDatum {
-                    let numberOfDays = self.calculateNumberOfDays(nextGame)
+                    let numberOfDays = self.calculateNumberOfDays(nextGame as Date)
                     if numberOfDays == 0 {
                         // speeldatum is vandaag
                         self.lblDagenTekst.text = txtVandaag
-                        let vandaagAttr = [NSForegroundColorAttributeName : UIColor.blackColor()]
+                        let vandaagAttr = [NSForegroundColorAttributeName : UIColor.black]
                         let myTekst = NSMutableAttributedString(string: txtVandaag, attributes: vandaagAttr)
                         myTekst.addAttribute(NSForegroundColorAttributeName, value: appColor, range: NSRange(location:1,length:8))
                         self.lblDagenTekst.attributedText = myTekst
@@ -61,7 +61,7 @@ class _x7ViewController: UIViewController {
                         let tempText  = txtNog + self.dagenText + txtTot
                         //let rangeNog = NSRange(location: 0, length: count(txtNog))
                         //let rangeTot = NSRange(location: count(txtNog), length: count(dagenText))
-                        let nogAttr = [NSForegroundColorAttributeName: UIColor.blackColor()]
+                        let nogAttr = [NSForegroundColorAttributeName: UIColor.black]
                         let myText = NSMutableAttributedString(string: tempText, attributes: nogAttr)
                         myText.addAttribute(NSForegroundColorAttributeName, value: appColor, range: NSRange(location:txtNog.characters.count,length:self.dagenText.characters.count))
                         self.lblDagenTekst.attributedText = myText 
@@ -81,9 +81,9 @@ class _x7ViewController: UIViewController {
             alert.show()
         }
     }
-    func calculateNumberOfDays(nextGame:NSDate) -> Int {
-        let diff = NSCalendar.currentCalendar().components(days, fromDate: today, toDate: nextGame, options: [])
-        return diff.day 
+    func calculateNumberOfDays(_ nextGame:Date) -> Int {
+        let diff = (Calendar.current as NSCalendar).components(days, from: today, to: nextGame, options: [])
+        return diff.day! 
         
     }
     

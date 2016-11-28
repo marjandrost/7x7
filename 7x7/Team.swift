@@ -19,14 +19,13 @@ class Team: NSObject {
         super.init()
     }
  
-    func fetchTeamPlayers(teamId: Int, succes: () -> () )
+    func fetchTeamPlayers(_ teamId: Int, succes: @escaping () -> () )
     {
         self.players = []
         let teamQuery = qrySpelersPerTeam + String(teamId)
-        let url =  NSURL(string: teamQuery)
-        let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-        let task = session.dataTaskWithURL(url!)
-            {
+        let url =  URL(string: teamQuery)
+        let session = URLSession(configuration: URLSessionConfiguration.default)
+        let task = session.dataTask(with: url!, completionHandler: {
                 ( data, response, error) in
                 
                 if(error != nil) {
@@ -36,9 +35,9 @@ class Team: NSObject {
                 {
             //        let jsonError: NSError?
                     let jsondata: NSArray
-                    if NSJSONSerialization.isValidJSONObject(data!) {
+                    if JSONSerialization.isValidJSONObject(data!) {
                     do {
-                        jsondata  = try (NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments) as? NSArray)!
+                        jsondata  = try (JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSArray)!
                         // success ...
                         for i in 0...(jsondata.count - 1)
                         {
@@ -63,7 +62,8 @@ class Team: NSObject {
                     }
                     succes() // if validJsonObject. Ook als geen valid Json (als er geen spelers zijn) dan toch success doen, melding niet gevonden wordt afgevangen in showplayers()
                 } // else
-        } // task
+        })            
+ // task
         task.resume()
     } //func
 

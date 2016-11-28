@@ -9,5 +9,5 @@
 import Foundation
 
 class SpeelDatum: NSObject {
-    var speelDatum: NSDate?
+    var speelDatum: Date?
 }

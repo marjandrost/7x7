@@ -24,12 +24,12 @@ class GameDetailViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var lblTijd: UILabel!
     @IBOutlet weak var lblCategorie: UILabel!
     // IBActions
-    @IBAction func showThuisTeam(sender: AnyObject) {
+    @IBAction func showThuisTeam(_ sender: AnyObject) {
         welkteam = "Thuis"
         showTeam(welkteam)
     }
     
-    @IBAction func showUitTeam(sender: AnyObject) {
+    @IBAction func showUitTeam(_ sender: AnyObject) {
         welkteam = "Uit"
         showTeam(welkteam)
     }
@@ -48,7 +48,7 @@ class GameDetailViewController: UIViewController, MKMapViewDelegate {
     let team = Team()
     let club = Club()
     var datumTekst = ""
-    var formatter: NSDateFormatter = NSDateFormatter()
+    var formatter: DateFormatter = DateFormatter()
  
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,24 +78,24 @@ class GameDetailViewController: UIViewController, MKMapViewDelegate {
         // get locatie info via clubId
         setLocatie()
          
-        formatter.dateStyle = NSDateFormatterStyle.ShortStyle
+        formatter.dateStyle = DateFormatter.Style.short
         formatter.dateFormat = "dd-MM-yyyy"
         
-        lblDatum.text = formatter.stringFromDate(gameInfo!.wedstrijdDatum!)
+        lblDatum.text = formatter.string(from: gameInfo!.wedstrijdDatum! as Date)
         lblDatum.font = UIFont(name: AppFontName, size: 18)
         lblTijd.text = gameInfo!.wedstrijdTijd!
         lblTijd.font = UIFont(name: AppFontName, size: 18)
         lblCategorie.text = gameInfo!.categorie!
         lblCategorie.font = UIFont(name: AppFontName, size: 18)
-        btnThuisteam.setTitle(gameInfo?.thuisTeam?.teamNaam, forState: UIControlState.Normal)
+        btnThuisteam.setTitle(gameInfo?.thuisTeam?.teamNaam, for: UIControlState())
         btnThuisteam.titleLabel?.font = UIFont(name: AppFontName, size: 20)
-        btnThuisteam.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Right
+        btnThuisteam.contentHorizontalAlignment = UIControlContentHorizontalAlignment.right
         
         lblTegen.font = UIFont(name: AppFontName, size: 20)
         
-        btnUitteam.setTitle(gameInfo?.uitTeam?.teamNaam, forState: UIControlState.Normal)
+        btnUitteam.setTitle(gameInfo?.uitTeam?.teamNaam, for: UIControlState())
         btnUitteam.titleLabel?.font = UIFont(name: AppFontName, size: 20)
-        btnUitteam.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
+        btnUitteam.contentHorizontalAlignment = UIControlContentHorizontalAlignment.left
         lblTekstDezeWedstrijd.text = "deze wedstrijd wordt gespeeld bij: "
         lblTekstDezeWedstrijd.font = UIFont(name: AppFontName, size: 18)
         lblClub.text = gameInfo!.locatie!.clubNaam
@@ -122,7 +122,7 @@ class GameDetailViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
-    func showTeam(welkteam : String) {
+    func showTeam(_ welkteam : String) {
         var teamId = 0
         switch welkteam {
             case "Thuis":
@@ -136,7 +136,7 @@ class GameDetailViewController: UIViewController, MKMapViewDelegate {
         }
         
         team.fetchTeamPlayers(teamId) {
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
                
                 self.showPlayers()
             }
@@ -150,21 +150,21 @@ class GameDetailViewController: UIViewController, MKMapViewDelegate {
         var players = team.getPlayers()
         // toon spelers van team
         // Om de spelers onderin in het scherm te tonen kan de preferredStyle naar .ActionSheet gezet worden.
-        let playersController: UIAlertController = UIAlertController(title: "Spelers \(teamNaam)", message: nil, preferredStyle: .Alert)
+        let playersController: UIAlertController = UIAlertController(title: "Spelers \(teamNaam)", message: nil, preferredStyle: .alert)
         var playerAction:UIAlertAction
         if players.count == 0 {
-            playerAction = UIAlertAction(title: "Geen spelers bekend", style: .Default, handler: nil)
+            playerAction = UIAlertAction(title: "Geen spelers bekend", style: .default, handler: nil)
             playersController.addAction(playerAction)
         } else {
             for i in 0...(players.count - 1) {
-                playerAction = UIAlertAction(title: "\(players[i].playerNaam)", style: .Default, handler: nil)
+                playerAction = UIAlertAction(title: "\(players[i].playerNaam)", style: .default, handler: nil)
                 playersController.addAction(playerAction)
             }
         }
         
-        let OKAction:UIAlertAction = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
+        let OKAction:UIAlertAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
         playersController.addAction(OKAction)
-        self.presentViewController(playersController, animated: true, completion: nil)
+        self.present(playersController, animated: true, completion: nil)
     }
     
     
@@ -195,10 +195,10 @@ class GameDetailViewController: UIViewController, MKMapViewDelegate {
         
     }
     
-    func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         var view: MKPinAnnotationView
         let identifier = "pin"
-        if let dequeuedView = mapView.dequeueReusableAnnotationViewWithIdentifier(identifier) as? MKPinAnnotationView {
+        if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKPinAnnotationView {
             dequeuedView.annotation = annotation
             view = dequeuedView
         } else {
@@ -213,16 +213,16 @@ class GameDetailViewController: UIViewController, MKMapViewDelegate {
         return view
     }
     
-    func centerMapOnLocation(location: CLLocation) {
+    func centerMapOnLocation(_ location: CLLocation) {
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate,
             regionRadius * 2.0, regionRadius * 2.0)
         mapView.setRegion(coordinateRegion, animated: true)
     }
 
-    func dataOfJson(url: String) -> NSDictionary {
-        let data = NSData(contentsOfURL: NSURL(string: url)!)
+    func dataOfJson(_ url: String) -> NSDictionary {
+        let data = try? Data(contentsOf: URL(string: url)!)
 //var jsonError: NSError?
-        return ((try! NSJSONSerialization.JSONObjectWithData(data!, options: [])) as! NSDictionary)
+        return ((try! JSONSerialization.jsonObject(with: data!, options: [])) as! NSDictionary)
     }
     
 

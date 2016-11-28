@@ -17,7 +17,7 @@ class GamesViewController: UIViewController, UITableViewDataSource, UITableViewD
     @IBOutlet weak var scCategorie: UISegmentedControl!
     
     
-    @IBAction func indexChanged(sender: UISegmentedControl) {
+    @IBAction func indexChanged(_ sender: UISegmentedControl) {
         switch scCategorie.selectedSegmentIndex
         {
         case 0:
@@ -36,14 +36,14 @@ class GamesViewController: UIViewController, UITableViewDataSource, UITableViewD
         // alleen als er internet verbinding is kan onderstaande worden uitgevoerd!
         gvCategorie = "35+"
         //scCategorie.titleLabel?.font = UIFont(name: AppFontName, size: 18)
-        let attr = NSDictionary(object: UIFont(name: AppFontName, size: 18.0)!, forKey: NSFontAttributeName)
-        scCategorie.setTitleTextAttributes(attr as [NSObject : AnyObject], forState: .Normal)
+        let attr = NSDictionary(object: UIFont(name: AppFontName, size: 18.0)!, forKey: NSFontAttributeName as NSCopying)
+        scCategorie.setTitleTextAttributes(attr as? [AnyHashable: Any], for: UIControlState())
         if Reachability.isConnectedToNetwork() == true
         {
         // Do any additional setup after loading the view.
             gameStore.fetchGames
                 {
-                dispatch_async(dispatch_get_main_queue())
+                DispatchQueue.main.async
                     {
                     if self.gameStore.numberOfGames(1) > 0
                         {
@@ -62,10 +62,10 @@ class GamesViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if self.tableView.indexPathForSelectedRow != nil {
-            self.tableView.deselectRowAtIndexPath(self.tableView.indexPathForSelectedRow!, animated: false)
+            self.tableView.deselectRow(at: self.tableView.indexPathForSelectedRow!, animated: false)
         }
     }
 
@@ -76,28 +76,28 @@ class GamesViewController: UIViewController, UITableViewDataSource, UITableViewD
     
      // MARK:    // MARK: - Table view data source
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // Return the number of rows in the section.
         return gameStore.numberOfGames(section)
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // Configure the cell...
-        let cell = tableView.dequeueReusableCellWithIdentifier("MainCell") as! GameCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MainCell") as! GameCell
         configureCell(cell, forRowAtIndexPath:indexPath)
         return cell
     }
     
-    func configureCell(cell: GameCell, forRowAtIndexPath indexPath: NSIndexPath) {
+    func configureCell(_ cell: GameCell, forRowAtIndexPath indexPath: IndexPath) {
         
         let  game =  gameStore.GameInfoForItemAtIndexPath(indexPath)
         
-        let formatter: NSDateFormatter = NSDateFormatter()
+        let formatter: DateFormatter = DateFormatter()
         
-        formatter.dateStyle = NSDateFormatterStyle.ShortStyle
+        formatter.dateStyle = DateFormatter.Style.short
         formatter.dateFormat = "dd-MM-yyyy"
         
-        let wdatum: String = formatter.stringFromDate(game.wedstrijdDatum!)
+        let wdatum: String = formatter.string(from: game.wedstrijdDatum!)
         
         cell.lblDatum.text = wdatum
 
@@ -116,12 +116,12 @@ class GamesViewController: UIViewController, UITableViewDataSource, UITableViewD
       // MARK: - Navigation
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     // Get the new view controller using segue.destinationViewController.
     // Pass the selected object to the new view controller.
         let indexPath = self.tableView.indexPathForSelectedRow
         let selGame = gameStore.GameInfoForItemAtIndexPath(indexPath!)
-        let detailViewController = segue.destinationViewController as! GameDetailViewController
+        let detailViewController = segue.destination as! GameDetailViewController
         detailViewController.title = "wedstrijd"
         detailViewController.gameInfo = selGame
     }
