@@ -16,12 +16,11 @@ class GameStore: NSObject {
     var data: NSArray = []
     
     
-    func fetchGames(succes: () -> () )
+    func fetchGames(_ succes: @escaping () -> () )
     {
-        let url =  NSURL(string: qryGames)
-        let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-        let task = session.dataTaskWithURL(url!)
-            {
+        let url =  URL(string: qryGames)
+        let session = URLSession(configuration: URLSessionConfiguration.default)
+        let task = session.dataTask(with: url!, completionHandler: {
                 (data, response, error) in
                
                 if(error != nil) {
@@ -34,7 +33,7 @@ class GameStore: NSObject {
                   let jsondata: NSArray
                   do
                   {
-                       jsondata = try (NSJSONSerialization.JSONObjectWithData(data!, options: []) as! NSArray)
+                       jsondata = try (JSONSerialization.jsonObject(with: data!, options: []) as! NSArray)
                         // success...
                            // store in gameStore for further use
                         if jsondata.count > 0 { // alleen als er data is gevonden!
@@ -65,12 +64,12 @@ class GameStore: NSObject {
                     
                                 newGame.wedstrijdTijd  = (meta["wedstrijden_tijd"] as! String)
                                 let datum = (meta["westrijden_datum"] as! String)
-                                let formatter: NSDateFormatter = NSDateFormatter()
+                                let formatter: DateFormatter = DateFormatter()
                     
-                                formatter.dateStyle = NSDateFormatterStyle.ShortStyle
+                                formatter.dateStyle = DateFormatter.Style.short
                                 formatter.dateFormat = "yyyyMMdd"
                     
-                                newGame.wedstrijdDatum = formatter.dateFromString(datum)
+                                newGame.wedstrijdDatum = formatter.date(from: datum)
                     
                                 newGame.categorie = (meta["wedstrijden_leeftijd_categorie"] as! String)
                                 // alleen in gamestore zetten als de categorie gelijk is aan de gewenste
@@ -80,8 +79,8 @@ class GameStore: NSObject {
                                     self.games45.append(newGame)
                                 }
                             } // for i in
-                            self.games35 = Array(self.games35.reverse())
-                            self.games45 = Array(self.games45.reverse())
+                            self.games35 = Array(self.games35.reversed())
+                            self.games45 = Array(self.games45.reversed())
                             self.setGamesForCategorie()
                             succes()
                         } // if
@@ -90,7 +89,8 @@ class GameStore: NSObject {
                         print("fetch failed: \(error as NSError).localizedDescription)")
                  } // do
                 } // else
-        } // task
+        })            
+ // task
         task.resume()
 
     }
@@ -99,12 +99,12 @@ class GameStore: NSObject {
         return 1
     }
     
-    func numberOfGames(section: Int) -> Int {
+    func numberOfGames(_ section: Int) -> Int {
        return games.count
     }
     
-    func GameInfoForItemAtIndexPath(indexPath: NSIndexPath) -> Game{
-        return games[indexPath.row]
+    func GameInfoForItemAtIndexPath(_ indexPath: IndexPath) -> Game{
+        return games[(indexPath as NSIndexPath).row]
     }
 
     func setGamesForCategorie() {

@@ -13,63 +13,63 @@ import UIKit
 class DatumPickerData: NSObject, UIPickerViewDataSource, UIPickerViewDelegate {
     
     var speelData:[SpeelDatum] = []
-    var selectedDate:NSDate?
+    var selectedDate:Date?
     
-    var formatter:NSDateFormatter = NSDateFormatter()
-    let vandaag = NSDate()
+    var formatter:DateFormatter = DateFormatter()
+    let vandaag = Date()
     
     var strVandaag:String = ""
     var strSpeeldatum:String = ""
 
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
     
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return speelData.count
     }
     
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
    
-        return formatter.stringFromDate(speelData[row].speelDatum!)
+        return formatter.string(from: speelData[row].speelDatum! as Date)
     }
     
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         
         if let vselectedDate = speelData[row].speelDatum {
           //  selectedDate = speelData[row].speelDatum
-           selectedDate = vselectedDate
+           selectedDate = vselectedDate as Date
         }
         
     }
     // je kunt view, en dus ook label gebruiken als definitie voor de row, en daardoor heb je meer mogelijkheden voor opmaak
-    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
         var pickerLabel = view as! UILabel!
         if view == nil {  //if no label there yet
             pickerLabel = UILabel()
-            pickerLabel.textAlignment = .Center
-            pickerLabel.backgroundColor = UIColor.whiteColor()
+            pickerLabel?.textAlignment = .center
+            pickerLabel?.backgroundColor = UIColor.white
         }
-        formatter.dateStyle = NSDateFormatterStyle.ShortStyle
+        formatter.dateStyle = DateFormatter.Style.short
         formatter.dateFormat = "dd-MM-yyyy"
         if let vspeelDatum = speelData[row].speelDatum {
-            let titleData = formatter.stringFromDate(vspeelDatum)
+            let titleData = formatter.string(from: vspeelDatum as Date)
         
             let myTitle = NSAttributedString(string: titleData, attributes: [NSFontAttributeName:UIFont(name: AppFontName, size: 20.0)!,
                                                                              NSForegroundColorAttributeName:appColor,
-                                                                             NSBackgroundColorAttributeName:UIColor.whiteColor()])
+                                                                             NSBackgroundColorAttributeName:UIColor.white])
             
             pickerLabel!.attributedText = myTitle
         }
-        selectedDate = speelData[0].speelDatum // om de eerste datum geselecteerd te zetten
-        return pickerLabel
+        selectedDate = speelData[0].speelDatum as Date? // om de eerste datum geselecteerd te zetten
+        return pickerLabel!
     }
 
     
-    func fetchDatums(succes: () -> () ) {
-        let url = NSURL(string: qryDates)
-        let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-        let task = session.dataTaskWithURL(url!) {
+    func fetchDatums(_ succes: @escaping () -> () ) {
+        let url = URL(string: qryDates)
+        let session = URLSession(configuration: URLSessionConfiguration.default)
+        let task = session.dataTask(with: url!, completionHandler: {
             (data, response, error) in
             
             if(error != nil) {
@@ -80,7 +80,7 @@ class DatumPickerData: NSObject, UIPickerViewDataSource, UIPickerViewDelegate {
             //let jsonError: NSError?
             let jsondata: NSArray
             do {
-               jsondata = try (NSJSONSerialization.JSONObjectWithData(data!, options: []) as? NSArray)!
+               jsondata = try (JSONSerialization.jsonObject(with: data!, options: []) as? NSArray)!
             
                            // store in gameStore for further use
                 for i in 0...(jsondata.count - 1) {
@@ -89,14 +89,14 @@ class DatumPickerData: NSObject, UIPickerViewDataSource, UIPickerViewDelegate {
                         if let meta = (maindata["meta"] as? NSDictionary) {
                             let newDatum = SpeelDatum()
                             if let vspeelDatum = (meta["wedstrijddatum_wedstrijddatum"] as? String) {
-                                self.formatter.dateStyle = NSDateFormatterStyle.ShortStyle
+                                self.formatter.dateStyle = DateFormatter.Style.short
                                 self.formatter.dateFormat = "yyyyMMdd"
-                                self.formatter.timeZone = NSTimeZone(name: "GMT")
-                                newDatum.speelDatum = self.formatter.dateFromString(vspeelDatum)
+                                self.formatter.timeZone = TimeZone(identifier: "GMT")
+                                newDatum.speelDatum = self.formatter.date(from: vspeelDatum)
                             }
                             // alleen toevoegen als vandaag <= nieuwe datum
-                            self.strVandaag = self.formatter.stringFromDate(self.vandaag)
-                            self.strSpeeldatum = self.formatter.stringFromDate(newDatum.speelDatum!)
+                            self.strVandaag = self.formatter.string(from: self.vandaag)
+                            self.strSpeeldatum = self.formatter.string(from: newDatum.speelDatum! as Date)
                             
                             if  self.strSpeeldatum > self.strVandaag
                             {
@@ -110,14 +110,14 @@ class DatumPickerData: NSObject, UIPickerViewDataSource, UIPickerViewDelegate {
                         } // if let meta
                     } // if let maindata
                 } //for i ..
-                self.speelData = Array(self.speelData.reverse()) // om in chronologische volgorde te krijgen!
+                self.speelData = Array(self.speelData.reversed()) // om in chronologische volgorde te krijgen!
                 succes()
             } catch {
                 //failure
                 print("Fetch failed: \(error as NSError).localizedDescription)")
                 }
             } //else
-        } //task
+        })  //task
         task.resume()
     } // func
     
@@ -169,14 +169,14 @@ class DatumPickerData: NSObject, UIPickerViewDataSource, UIPickerViewDelegate {
         task.resume()
     }
 */
-    func addDays(date: NSDate, additionalDays: Int) -> NSDate {
+    func addDays(_ date: Date, additionalDays: Int) -> Date {
         // adding $additionalDays
-        let components = NSDateComponents()
+        var components = DateComponents()
         components.day = additionalDays
         
         // important: NSCalendarOptions(0)
-        let futureDate = NSCalendar.currentCalendar()
-            .dateByAddingComponents(components, toDate: date, options: NSCalendarOptions(rawValue: 0))
+        let futureDate = (Calendar.current as NSCalendar)
+            .date(byAdding: components, to: date, options: NSCalendar.Options(rawValue: 0))
         return futureDate!
     }
 }

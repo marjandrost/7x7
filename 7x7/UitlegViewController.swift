@@ -18,7 +18,7 @@ class UitlegViewController: UIViewController, UITableViewDataSource, UITableView
 
         // Do any additional setup after loading the view.
         
-        let path = NSBundle.mainBundle().pathForResource("Uitleg", ofType: "plist")!
+        let path = Bundle.main.path(forResource: "Uitleg", ofType: "plist")!
         let algemeenInfo = NSDictionary(contentsOfFile: path)!
         uitleg = algemeenInfo["WatIsGegevens"]! as! [NSDictionary] as! [[String: String]]
         self.navigationItem.title = "uitleg"
@@ -29,7 +29,7 @@ class UitlegViewController: UIViewController, UITableViewDataSource, UITableView
         // Dispose of any resources that can be recreated.
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tableView.reloadData()
     }
@@ -38,21 +38,21 @@ class UitlegViewController: UIViewController, UITableViewDataSource, UITableView
     // MARK: - Table view data source
     
       
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete method implementation.
         // Return the number of rows in the section.
         return uitleg.count
     }
     
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)as! WatIsCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)as! WatIsCell
         
         // Configure the cell...
-        let info = uitleg[indexPath.row]
+        let info = uitleg[(indexPath as NSIndexPath).row]
         let imagename = info["plaatje"]
         cell.lblHeaderText.text = info["kopregel"]
-        cell.lblHeaderText.textAlignment = NSTextAlignment.Center
+        cell.lblHeaderText.textAlignment = NSTextAlignment.center
         cell.lblHeaderText.font = UIFont(name: AppFontName, size: 28)
         let appColor = UIColor(red: 220/255, green: 41/255, blue: 41/255, alpha: 1)
         cell.lblHeaderText.textColor = appColor
@@ -61,17 +61,17 @@ class UitlegViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         
         let indexPath = self.tableView.indexPathForSelectedRow
-        let row = indexPath!.row
+        let row = (indexPath! as NSIndexPath).row
         let info = uitleg[row]
-        let detailViewController = segue.destinationViewController as! UitlegDetailViewController
+        let detailViewController = segue.destination as! UitlegDetailViewController
         detailViewController.detailtext = info["langetekst"]
         detailViewController.title = info["kopregel"]
-        tableView.deselectRowAtIndexPath(indexPath!, animated: true)
+        tableView.deselectRow(at: indexPath!, animated: true)
     }
     
 

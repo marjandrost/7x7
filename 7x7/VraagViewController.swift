@@ -20,10 +20,10 @@ class VraagViewController: UIViewController, MFMailComposeViewControllerDelegate
     @IBOutlet weak var txtBodyField: UITextView!
     
     @IBOutlet weak var btnSend: UIButton!
-    @IBAction func sendAction(sender: AnyObject) {
+    @IBAction func sendAction(_ sender: AnyObject) {
         let mailComposeViewController = configuredMailComposeViewController()
         if MFMailComposeViewController.canSendMail() {
-            self.presentViewController(mailComposeViewController, animated: true, completion: nil)
+            self.present(mailComposeViewController, animated: true, completion: nil)
         } else {
             self.showSendMailErrorAlert()
         }
@@ -36,7 +36,7 @@ class VraagViewController: UIViewController, MFMailComposeViewControllerDelegate
         configureView()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         txtBodyField.text = ""
     }
@@ -47,13 +47,13 @@ class VraagViewController: UIViewController, MFMailComposeViewControllerDelegate
     }
     
     func configureView() {
-        lblGroot.textAlignment = .Center
+        lblGroot.textAlignment = .center
         lblGroot.font = UIFont(name: AppFontName, size: 40)
-        lblGroot.textColor = UIColor.whiteColor()
+        lblGroot.textColor = UIColor.white
    
-        lblKlein.textAlignment = .Center
+        lblKlein.textAlignment = .center
         lblKlein.font = UIFont(name: AppFontName, size: 20)
-        lblKlein.textColor = UIColor.whiteColor()
+        lblKlein.textColor = UIColor.white
 
         txtSubjectField.delegate = self
         txtSubjectField.font = UIFont(name: AppFontName, size: 20)
@@ -65,7 +65,7 @@ class VraagViewController: UIViewController, MFMailComposeViewControllerDelegate
         txtBodyField.font = UIFont(name: AppFontName, size: 18)
         txtBodyField.text = ""
         
-        btnSend.tintColor = UIColor.blackColor()
+        btnSend.tintColor = UIColor.black
         btnSend.titleLabel?.font = UIFont(name: AppFontName, size: 18)  
     }
 
@@ -93,35 +93,35 @@ class VraagViewController: UIViewController, MFMailComposeViewControllerDelegate
     func getEmailSettings() -> String {
        #if DEBUG
             // read plist to obtain the recipients for the email
-            let path = NSBundle.mainBundle().pathForResource("EmailSettings", ofType: "plist")
+            let path = Bundle.main.path(forResource: "EmailSettings", ofType: "plist")
             let dict = NSDictionary(contentsOfFile: path!)
-            let recipients = dict?.valueForKey(recipientsKey) as! String
+            let recipients = dict?.value(forKey: recipientsKey) as! String
         #else
             // in productie!
-            var recipients = vraagRecipient
+            let recipients = vraagRecipient
         #endif
         return recipients
     }
     
     // Email Delegate
-    func mailComposeController(controller:MFMailComposeViewController, didFinishWithResult result:MFMailComposeResult, error:NSError?) {
+    func mailComposeController(_ controller:MFMailComposeViewController, didFinishWith result:MFMailComposeResult, error:Error?) {
         
         switch result.rawValue {
-        case MFMailComposeResultCancelled.rawValue:
+        case MFMailComposeResult.cancelled.rawValue:
             let sendMailStatus = UIAlertView(
                 title: "Mail geannuleerd",
                 message: "Je vraag is niet verstuurd",
                 delegate: self,
                 cancelButtonTitle: "OK")
             sendMailStatus.show()
-        case MFMailComposeResultSaved.rawValue:
+        case MFMailComposeResult.saved.rawValue:
             let sendMailStatus = UIAlertView(
                 title: "Mail opgeslagen",
                 message: "Je vraag is niet verstuurd, het concept is opgegeslagen",
                 delegate: self,
                 cancelButtonTitle: "OK")
             sendMailStatus.show()
-        case MFMailComposeResultSent.rawValue:
+        case MFMailComposeResult.sent.rawValue:
             // Melding geven dat aanmelding is gelukt
             let sendMailStatus = UIAlertView(
                 title: "Gelukt!",
@@ -129,7 +129,7 @@ class VraagViewController: UIViewController, MFMailComposeViewControllerDelegate
                 delegate: self,
                 cancelButtonTitle: "OK")
             sendMailStatus.show()
-        case MFMailComposeResultFailed.rawValue:
+        case MFMailComposeResult.failed.rawValue:
             let sendMailStatus = UIAlertView(
                 title: "FOUT",
                 message: "Je vraag is niet verstuurd: \(error!.localizedDescription)",
@@ -140,19 +140,19 @@ class VraagViewController: UIViewController, MFMailComposeViewControllerDelegate
         default:
             break
         }
-        self.dismissViewControllerAnimated(false, completion: nil)
+        self.dismiss(animated: false, completion: nil)
         
     }
     
     
     //UITextFieldDelegate
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
     
     //UITextViewDelegate
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         txtBodyField.text = textView.text
         // when enter key is pressed, the keyboard wil hide
         if text == "\n" {

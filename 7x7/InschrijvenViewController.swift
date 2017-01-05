@@ -26,7 +26,7 @@ class InschrijvenViewController: UIViewController, MFMailComposeViewControllerDe
     @IBOutlet weak var svScrollView: UIScrollView!
     
     @IBOutlet weak var btnKiesGebdatum: UIButton!
-    @IBAction func SelectClub(sender: UIButton) {
+    @IBAction func SelectClub(_ sender: UIButton) {
         txtClub.text = clubPickerData.selectedClub.clubNaam
         vEmailClub = clubPickerData.selectedClub.email
         self.view.endEditing(true)
@@ -34,11 +34,11 @@ class InschrijvenViewController: UIViewController, MFMailComposeViewControllerDe
     
     @IBOutlet weak var btnKiesDatum: UIButton!
     
-    @IBAction func SelectDate(sender: UIButton) {
-        let dateFormatter = NSDateFormatter()
+    @IBAction func SelectDate(_ sender: UIButton) {
+        let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd-MM-yyyy"
         if let vselectedDate = datumPickerData.selectedDate {
-            txtSpeelDatum.text = dateFormatter.stringFromDate(vselectedDate)
+            txtSpeelDatum.text = dateFormatter.string(from: vselectedDate as Date)
         }
         self.view.endEditing(true)
     }
@@ -48,68 +48,68 @@ class InschrijvenViewController: UIViewController, MFMailComposeViewControllerDe
     var keyboardHeight: CGFloat = 0.0
     var toRect: CGRect = datumFrame
 
-    @IBAction func SelectGebdatum(sender: UIButton) {
+    @IBAction func SelectGebdatum(_ sender: UIButton) {
         self.view.endEditing(true)    }
     
-    @IBAction func textFieldEditing(sender: UITextField) {
-        datePickerView.datePickerMode = UIDatePickerMode.Date
-        let dateformatter = NSDateFormatter()
+    @IBAction func textFieldEditing(_ sender: UITextField) {
+        datePickerView.datePickerMode = UIDatePickerMode.date
+        let dateformatter = DateFormatter()
         dateformatter.dateFormat = "dd-MM-yyyy"
         let defaultDate = "01-Jan-1970"
-        datePickerView.date = dateformatter.dateFromString(defaultDate)!
-        datePickerView.backgroundColor = UIColor.whiteColor()
+        datePickerView.date = dateformatter.date(from: defaultDate)!
+        datePickerView.backgroundColor = UIColor.white
         datePickerView.frame = datumFrame
         sender.inputView = datePickerView
-        datePickerView.addTarget(self, action: Selector("datePickerValueChanged:"), forControlEvents: UIControlEvents.ValueChanged)
-        txtGebDatum.text = dateformatter.stringFromDate(datePickerView.date)
+        datePickerView.addTarget(self, action: #selector(InschrijvenViewController.datePickerValueChanged(_:)), for: UIControlEvents.valueChanged)
+        txtGebDatum.text = dateformatter.string(from: datePickerView.date)
     }
     
-    @IBAction func endEditingClub(sender: UITextField) {
+    @IBAction func endEditingClub(_ sender: UITextField) {
         txtClub.text = clubPickerData.selectedClub.clubNaam
         vEmailClub = clubPickerData.selectedClub.email
         pickerHeight = clubFrame.height
-        toRect = CGRectMake(0.0 , pickerHeight * -1 , svScrollView.contentSize.width, svScrollView.contentSize.height)
+        toRect = CGRect(x: 0.0 , y: pickerHeight * -1 , width: svScrollView.contentSize.width, height: svScrollView.contentSize.height)
         svScrollView.scrollRectToVisible(toRect, animated: true)
     }
     
-    @IBAction func endEditingDatum(sender: UITextField) {
-        let dateFormatter = NSDateFormatter()
+    @IBAction func endEditingDatum(_ sender: UITextField) {
+        let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd-MM-yyyy"
         if let vselectedDate = datumPickerData.selectedDate {
-        txtSpeelDatum.text = dateFormatter.stringFromDate(vselectedDate)
+        txtSpeelDatum.text = dateFormatter.string(from: vselectedDate as Date)
         }
         pickerHeight = datumFrame.height
-        toRect = CGRectMake(0.0 , pickerHeight * -1 , svScrollView.contentSize.width, svScrollView.contentSize.height)
+        toRect = CGRect(x: 0.0 , y: pickerHeight * -1 , width: svScrollView.contentSize.width, height: svScrollView.contentSize.height)
         svScrollView.scrollRectToVisible(toRect, animated: true)
     }
     
-    @IBAction func startEditingClub(sender: UITextField) {
+    @IBAction func startEditingClub(_ sender: UITextField) {
         // scroll om textfield in zicht te houden als picker tevoorschijn komt
         pickerHeight = clubFrame.height
-        toRect = CGRectMake(0.0 , pickerHeight, svScrollView.contentSize.width, svScrollView.contentSize.height)
+        toRect = CGRect(x: 0.0 , y: pickerHeight, width: svScrollView.contentSize.width, height: svScrollView.contentSize.height)
         svScrollView.scrollRectToVisible(toRect, animated: true)
     }
     
-    @IBAction func starteditingDatum(sender: UITextField) {
+    @IBAction func starteditingDatum(_ sender: UITextField) {
         // scroll om textfield in zicht te houden als picker tevoorschijn komt
         pickerHeight = datumFrame.height
-        toRect = CGRectMake(0.0 , pickerHeight, svScrollView.contentSize.width, svScrollView.contentSize.height)
+        toRect = CGRect(x: 0.0 , y: pickerHeight, width: svScrollView.contentSize.width, height: svScrollView.contentSize.height)
         svScrollView.scrollRectToVisible(toRect, animated: true)
     }
     
-    @IBAction func startEditingWoonplaats(sender: UITextField) {
+    @IBAction func startEditingWoonplaats(_ sender: UITextField) {
         keyboardHeight = clubFrame.height
-        toRect = CGRectMake(0.0 , keyboardHeight, svScrollView.contentSize.width, svScrollView.contentSize.height)
+        toRect = CGRect(x: 0.0 , y: keyboardHeight, width: svScrollView.contentSize.width, height: svScrollView.contentSize.height)
         svScrollView.scrollRectToVisible(toRect, animated: true)
     }
     
-    @IBAction func endEditingWoonplaats(sender: UITextField) {
+    @IBAction func endEditingWoonplaats(_ sender: UITextField) {
         keyboardHeight = clubFrame.height
-        toRect = CGRectMake(0.0 , keyboardHeight * -1 , svScrollView.contentSize.width, svScrollView.contentSize.height)
+        toRect = CGRect(x: 0.0 , y: keyboardHeight * -1 , width: svScrollView.contentSize.width, height: svScrollView.contentSize.height)
         svScrollView.scrollRectToVisible(toRect, animated: true)
     }
     
-    @IBAction func Inschrijven(sender: AnyObject) {
+    @IBAction func Inschrijven(_ sender: AnyObject) {
         // voor aanmelding is nodig dat alle velden zijn ingevuld
         var foutgevonden:Bool = false
         
@@ -137,7 +137,7 @@ class InschrijvenViewController: UIViewController, MFMailComposeViewControllerDe
         }
         
         // ingevulde waardes bewaren
-        let defaults = NSUserDefaults.standardUserDefaults()
+        let defaults = UserDefaults.standard
         defaults.setValue(txtNaam.text, forKey: "NameField")
         defaults.setValue(txtEmail.text, forKey: "EmailField")
         defaults.setValue(txtPlaats.text, forKey: "PlaceField")
@@ -147,7 +147,7 @@ class InschrijvenViewController: UIViewController, MFMailComposeViewControllerDe
         // mail versturen
         let mailComposeViewController = configuredMailComposeViewController()
         if MFMailComposeViewController.canSendMail() {
-            self.presentViewController(mailComposeViewController, animated: true, completion: nil)
+            self.present(mailComposeViewController, animated: true, completion: nil)
         } else {
             self.showSendMailErrorAlert()
         }
@@ -168,12 +168,12 @@ class InschrijvenViewController: UIViewController, MFMailComposeViewControllerDe
         // alleen als er internet verbinding is kan onderstaande worden uitgevoerd!
         if Reachability.isConnectedToNetwork() == true {
         clubPickerData.fetchClubs {
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
                 self.clubPickerView.reloadAllComponents()
             }
         }
         datumPickerData.fetchDatums {
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
                 self.datumPickerView.reloadAllComponents()
             }
         }
@@ -186,21 +186,21 @@ class InschrijvenViewController: UIViewController, MFMailComposeViewControllerDe
         
      }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         getDefaults()
     }
     
     func configureView() {
-        lblGroot.textAlignment = .Center
+        lblGroot.textAlignment = .center
         lblGroot.font = UIFont(name: AppFontName, size: 40)
-        lblGroot.textColor = UIColor.whiteColor()
+        lblGroot.textColor = UIColor.white
         
-        lblKlein.textAlignment = .Center
+        lblKlein.textAlignment = .center
         lblKlein.font = UIFont(name: AppFontName, size: 20)
-        lblKlein.textColor = UIColor.whiteColor()
+        lblKlein.textColor = UIColor.white
 
-        btnInschrijven.tintColor = UIColor.blackColor()
+        btnInschrijven.tintColor = UIColor.black
         btnInschrijven.titleLabel?.font = UIFont(name: AppFontName, size: 18)
         // Door deze class als delegate te benoemen, reageert het toetsenbord op 'return', het toetsenbord verdwijnt dan
         txtNaam.delegate = self
@@ -212,12 +212,12 @@ class InschrijvenViewController: UIViewController, MFMailComposeViewControllerDe
         txtGebDatum.font = UIFont(name: AppFontName, size: 18)
         // tbv selectie geboortedatum
         btnKiesGebdatum.titleLabel?.font = UIFont(name: AppFontName, size: 18)
-        btnKiesGebdatum.tintColor = UIColor.blackColor()
+        btnKiesGebdatum.tintColor = UIColor.black
         // tbv selectie speeldata
         datumPickerView.delegate = datumPickerData
         datumPickerView.dataSource = datumPickerData
         datumPickerView.frame = datumFrame
-        datumPickerView.backgroundColor = UIColor.whiteColor()
+        datumPickerView.backgroundColor = UIColor.white
         txtSpeelDatum.inputView = datumPickerView
         txtSpeelDatum.frame  = datumFrame
         txtSpeelDatum.font = UIFont(name: AppFontName, size: 18)
@@ -226,47 +226,47 @@ class InschrijvenViewController: UIViewController, MFMailComposeViewControllerDe
         clubPickerView.delegate = clubPickerData
         clubPickerView.dataSource = clubPickerData
         clubPickerView.frame = clubFrame
-        clubPickerView.backgroundColor = UIColor.whiteColor()
+        clubPickerView.backgroundColor = UIColor.white
         txtClub.inputView = clubPickerView
         txtClub.font = UIFont(name: AppFontName, size: 18)
-        btnKiesClub.tintColor = UIColor.blackColor()
+        btnKiesClub.tintColor = UIColor.black
         btnKiesClub.titleLabel?.font = UIFont(name: AppFontName, size: 18)
-        btnKiesDatum.tintColor = UIColor.blackColor()
+        btnKiesDatum.tintColor = UIColor.black
         btnKiesDatum.titleLabel?.font = UIFont(name: AppFontName, size: 18)
     }
     
     func getDefaults() {
         // bepaal of er al UserDefaults zijn
-        let defaults = NSUserDefaults.standardUserDefaults()
-        if (defaults.objectForKey("NameField") != nil) {
-            txtNaam.text = defaults.stringForKey("NameField")
+        let defaults = UserDefaults.standard
+        if (defaults.object(forKey: "NameField") != nil) {
+            txtNaam.text = defaults.string(forKey: "NameField")
         }
-        if (defaults.objectForKey("EmailField") != nil) {
-            txtEmail.text = defaults.stringForKey("EmailField")
+        if (defaults.object(forKey: "EmailField") != nil) {
+            txtEmail.text = defaults.string(forKey: "EmailField")
         }
-        if (defaults.objectForKey("PlaceField") != nil) {
-            txtPlaats.text = defaults.stringForKey("PlaceField")
+        if (defaults.object(forKey: "PlaceField") != nil) {
+            txtPlaats.text = defaults.string(forKey: "PlaceField")
         }
-        if (defaults.objectForKey("AgeField") != nil) {
-            txtGebDatum.text = defaults.stringForKey("AgeField")
+        if (defaults.object(forKey: "AgeField") != nil) {
+            txtGebDatum.text = defaults.string(forKey: "AgeField")
         }
-        if (defaults.objectForKey("ClubField") != nil) {
-            txtClub.text = defaults.stringForKey("ClubField")
+        if (defaults.object(forKey: "ClubField") != nil) {
+            txtClub.text = defaults.string(forKey: "ClubField")
         }
-        if (defaults.objectForKey("ClubEmail") != nil) {
-            vEmailClub = defaults.stringForKey("ClubEmail")!
+        if (defaults.object(forKey: "ClubEmail") != nil) {
+            vEmailClub = defaults.string(forKey: "ClubEmail")!
         }
         txtSpeelDatum.text = "" // leeg maken voor nieuwe inschrijving
     }
     
-    func datePickerValueChanged(sender: UIDatePicker) {
-        let dateformatter = NSDateFormatter()
-        dateformatter.dateStyle = NSDateFormatterStyle.ShortStyle
+    func datePickerValueChanged(_ sender: UIDatePicker) {
+        let dateformatter = DateFormatter()
+        dateformatter.dateStyle = DateFormatter.Style.short
         dateformatter.dateFormat = "dd-MM-yyyy"
-        txtGebDatum.text = dateformatter.stringFromDate(sender.date)
+        txtGebDatum.text = dateformatter.string(from: sender.date)
     }
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
 
@@ -276,17 +276,17 @@ class InschrijvenViewController: UIViewController, MFMailComposeViewControllerDe
     }
     
     //UITextFieldDelegate
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
 
     // Geeft foutmelding indien er fouten zijn gevonden
     func showError() {
-        let actionController = UIAlertController(title: "Fout", message: "Niet alle velden zijn ingevuld", preferredStyle: .Alert)
-        let cancelAction = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
+        let actionController = UIAlertController(title: "Fout", message: "Niet alle velden zijn ingevuld", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
         actionController.addAction(cancelAction)
-        self.presentViewController(actionController, animated: true, completion: nil)
+        self.present(actionController, animated: true, completion: nil)
     }
 
     // MARK-
@@ -326,35 +326,35 @@ class InschrijvenViewController: UIViewController, MFMailComposeViewControllerDe
     func getEmailSettings() -> String {
         #if DEBUG
             // read plist to obtain the recipients for the email
-           let path = NSBundle.mainBundle().pathForResource("EmailSettings", ofType: "plist")
+           let path = Bundle.main.path(forResource: "EmailSettings", ofType: "plist")
            let dict = NSDictionary(contentsOfFile: path!)
-           let recipients = dict?.valueForKey(recipientsKey) as! String
+           let recipients = dict?.value(forKey: recipientsKey) as! String
         #else
             // in productie!
-            var recipients = vEmailClub // Komt of uit bewaarde gegevens of uit de geselecteerde club
+            let recipients = vEmailClub // Komt of uit bewaarde gegevens of uit de geselecteerde club
         #endif
         return recipients
     }
      
     // Email Delegate
-    func mailComposeController(controller:MFMailComposeViewController, didFinishWithResult result:MFMailComposeResult, error:NSError?) {
+    func mailComposeController(_ controller:MFMailComposeViewController, didFinishWith result:MFMailComposeResult, error:Error?) {
         
         switch result.rawValue {
-        case MFMailComposeResultCancelled.rawValue:
+        case MFMailComposeResult.cancelled.rawValue:
             let sendMailStatus = UIAlertView(
                 title: "Mail geannuleerd",
                 message: "Je aanmelding is niet verstuurd",
                 delegate: self,
                 cancelButtonTitle: "OK")
             sendMailStatus.show()
-        case MFMailComposeResultSaved.rawValue:
+        case MFMailComposeResult.saved.rawValue:
             let sendMailStatus = UIAlertView(
                 title: "Mail opgeslagen",
                 message: "Je aanmelding is niet verstuurd, het concept is opgegeslagen",
                 delegate: self,
                 cancelButtonTitle: "OK")
             sendMailStatus.show()
-        case MFMailComposeResultSent.rawValue:
+        case MFMailComposeResult.sent.rawValue:
             // Melding geven dat aanmelding is gelukt
             let sendMailStatus = UIAlertView(
                 title: "Mail verstuurd",
@@ -362,7 +362,7 @@ class InschrijvenViewController: UIViewController, MFMailComposeViewControllerDe
                 delegate: self,
                 cancelButtonTitle: "OK")
             sendMailStatus.show()
-        case MFMailComposeResultFailed.rawValue:
+        case MFMailComposeResult.failed.rawValue:
             let sendMailStatus = UIAlertView(
                 title: "FOUT",
                 message: "Je aanmelding is niet verstuurd: \(error!.localizedDescription)",
@@ -372,6 +372,6 @@ class InschrijvenViewController: UIViewController, MFMailComposeViewControllerDe
         default:
             break
         }
-        self.dismissViewControllerAnimated(false, completion: nil)
+        self.dismiss(animated: false, completion: nil)
     }
 }

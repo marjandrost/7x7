@@ -16,43 +16,43 @@ class ClubPickerData: NSObject, UIPickerViewDataSource, UIPickerViewDelegate {
     var clubs:[Club] = []
     var selectedClub:Club = Club()
     
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
     
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return clubs.count
     }
     
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return clubs[row].clubNaam
     }
     
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         selectedClub = clubs[row]
     }
     // je kunt view, en dus ook label gebruiken als definitie voor de row, en daardoor heb je meer mogelijkheden voor opmaak
-    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
         var pickerLabel = view as! UILabel!
         if view == nil {  //if no label there yet
             pickerLabel = UILabel()
-            pickerLabel.textAlignment = .Center
-            pickerLabel.backgroundColor = UIColor.whiteColor()
+            pickerLabel?.textAlignment = .center
+            pickerLabel?.backgroundColor = UIColor.white
         }
         let titleData = clubs[row].clubNaam
         let myTitle = NSAttributedString(string: titleData, attributes: [NSFontAttributeName:UIFont(name: AppFontName, size: 20.0)!,
                                                                          NSForegroundColorAttributeName:appColor,
-                                                                         NSBackgroundColorAttributeName:UIColor.whiteColor()])
+                                                                         NSBackgroundColorAttributeName:UIColor.white])
         selectedClub  = clubs[0] // om eerste club geselecteerd te zetten
 
         pickerLabel!.attributedText = myTitle
-        return pickerLabel
+        return pickerLabel!
     }
    
-    func fetchClubs(succes: () -> () ) {
-        let url = NSURL(string: qryClubs)
-        let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-        let task = session.dataTaskWithURL(url!) {
+    func fetchClubs(_ succes: @escaping () -> () ) {
+        let url = URL(string: qryClubs)
+        let session = URLSession(configuration: URLSessionConfiguration.default)
+        let task = session.dataTask(with: url!, completionHandler: {
             (data, response, error) in
             
             if(error != nil) {
@@ -64,7 +64,7 @@ class ClubPickerData: NSObject, UIPickerViewDataSource, UIPickerViewDelegate {
            // let jsonError: NSError?
             let jsondata: NSArray
             do {
-                jsondata = try ( NSJSONSerialization.JSONObjectWithData(data!, options: []) as? NSArray)!
+                jsondata = try ( JSONSerialization.jsonObject(with: data!, options: []) as? NSArray)!
                 // success
                    // store in gameStore for further use
                 for i in 0...(jsondata.count - 1) {
@@ -101,7 +101,7 @@ class ClubPickerData: NSObject, UIPickerViewDataSource, UIPickerViewDelegate {
                 }
    
             } // else
-        } // task
+        })  // task
         task.resume()
     } // func
   

@@ -445,7 +445,7 @@
             startingLineNumber = "230"
             endingLineNumber = "230"
             landmarkName = "configureView()"
-            landmarkType = "5">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -525,7 +525,7 @@
             startingLineNumber = "166"
             endingLineNumber = "166"
             landmarkName = "viewDidLoad()"
-            landmarkType = "5">
+            landmarkType = "7">
             <Locations>
                <Location
                   shouldBeEnabled = "No"
@@ -588,7 +588,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "92"
             endingLineNumber = "92"
-            landmarkName = "fetchDatums(succes:)"
+            landmarkName = "fetchDatums(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -605,7 +605,7 @@
             startingLineNumber = "334"
             endingLineNumber = "334"
             landmarkName = "getEmailSettings()"
-            landmarkType = "5">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -620,7 +620,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "174"
             endingLineNumber = "174"
-            landmarkName = "addDays(date:additionalDays:)"
+            landmarkName = "addDays(_:additionalDays:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -637,7 +637,7 @@
             startingLineNumber = "114"
             endingLineNumber = "114"
             landmarkName = "Inschrijven(_:)"
-            landmarkType = "5">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -652,7 +652,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "113"
             endingLineNumber = "113"
-            landmarkName = "fetchDatums(succes:)"
+            landmarkName = "fetchDatums(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -668,7 +668,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "116"
             endingLineNumber = "116"
-            landmarkName = "fetchDatums(succes:)"
+            landmarkName = "fetchDatums(_:)"
             landmarkType = "7">
             <Locations>
                <Location
@@ -732,7 +732,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "21"
             endingLineNumber = "21"
-            landmarkName = "indexChanged(sender:)"
+            landmarkName = "indexChanged(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -748,7 +748,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "112"
             endingLineNumber = "112"
-            landmarkName = "fetchDatums(succes:)"
+            landmarkName = "fetchDatums(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -812,7 +812,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "87"
             endingLineNumber = "87"
-            landmarkName = "tableView(tableView:cellForRowAtIndexPath:)"
+            landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -838,29 +838,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "7x7ViewController.swift"
-            timestampString = "463056339.346888"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "86"
-            endingLineNumber = "86"
-            landmarkName = "calculateNumberOfDays(nextGame:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "7x7/DatumPickerData.swift"
             timestampString = "465221292.794669"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "102"
             endingLineNumber = "102"
-            landmarkName = "fetchDatums(succes:)"
+            landmarkName = "fetchDatums(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -876,7 +860,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "101"
             endingLineNumber = "101"
-            landmarkName = "fetchDatums(succes:)"
+            landmarkName = "fetchDatums(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -941,7 +925,7 @@
             startingLineNumber = "300"
             endingLineNumber = "300"
             landmarkName = "configuredMailComposeViewController()"
-            landmarkType = "5">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -958,22 +942,6 @@
             endingLineNumber = "190"
             landmarkName = "setAnnotation()"
             landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "7x7ViewController.swift"
-            timestampString = "465297621.124991"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "40"
-            endingLineNumber = "40"
-            landmarkName = "configureView()"
-            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1011,7 +979,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "7x7/DatumPickerData.swift"
@@ -1020,23 +988,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "70"
             endingLineNumber = "70"
-            landmarkName = "fetchDatums(succes:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "7x7ViewController.swift"
-            timestampString = "496054838.947647"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "38"
-            endingLineNumber = "38"
-            landmarkName = "configureView()"
+            landmarkName = "fetchDatums(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

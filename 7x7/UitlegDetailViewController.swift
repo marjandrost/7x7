@@ -29,7 +29,7 @@ class UitlegDetailViewController: UIViewController, UIScrollViewDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
  
         // put data on the screen
         tvUitlegDetail.text = detailtext
